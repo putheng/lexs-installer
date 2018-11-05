@@ -42,6 +42,7 @@ passwordgen() {
 }
 
 mysqlpassword=$(passwordgen);
+mysqlrootpassword=$(passwordgen);
 mysqlusername=$(passwordgen);
 mysqldatabase=$(passwordgen);
 
@@ -49,8 +50,8 @@ echo "\nUpdate"
 sudo apt-get update
 
 echo "\nSet MySql User, Password"
-debconf-set-selections <<< "mysql-server mysql-server/root_password password $mysqlpassword"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $mysqlpassword"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password $mysqlrootpassword"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $mysqlrootpassword"
 
 echo "\nInstall MySql"
 sudo apt-get install -y mysql-server bsdutils libsasl2-modules-sql libsasl2-modules
@@ -58,14 +59,23 @@ sudo apt-get install -y mysql-server bsdutils libsasl2-modules-sql libsasl2-modu
 sudo service mysql restart
 
 # small cleaning of mysql access
-mysql -u root -p"$mysqlpassword" -e "DELETE FROM mysql.user WHERE User='root' AND Host != 'localhost'";
-mysql -u root -p"$mysqlpassword" -e "DELETE FROM mysql.user WHERE User=''";
-mysql -u root -p"$mysqlpassword" -e "FLUSH PRIVILEGES";
+mysql -u root -p"$mysqlrootpassword" -e "DELETE FROM mysql.user WHERE User='root' AND Host != 'localhost'";
+mysql -u root -p"$mysqlrootpassword" -e "DELETE FROM mysql.user WHERE User=''";
+mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES";
 
 # remove test table that is no longer used
-mysql -u root -p"$mysqlpassword" -e "DROP DATABASE IF EXISTS test";
+mysql -u root -p"$mysqlrootpassword" -e "DROP DATABASE IF EXISTS test";
 
-mysql -u root -p"$mysqlpassword" < mysql.sql
+# Create Mysql Database
+mysql -u root -p"$mysqlrootpassword" -e "CREATE DATABASE `$mysqldatabase` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+
+# Create Mysql User
+mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword'";
+mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword'";
+
+mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
+mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
+mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES;";
 
 echo "\nInstall Composer"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
@@ -179,10 +189,24 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "DB_CONNECTION=mysql"
     echo "DB_HOST=127.0.0.1"
     echo "DB_PORT=3306"
-    echo "DB_DATABASE=laravelbuild"
-    echo "APP_DEBUG"
-    echo "APP_DEBUG"
+    echo "DB_DATABASE=$mysqldatabase"
+    echo "DB_USERNAME=$mysqlusername"
+    echo "DB_PASSWORD=$mysqlpassword"
+    echo ""
+    echo "BROADCAST_DRIVER=log"
+    echo "CACHE_DRIVER=file"
+    echo "SESSION_DRIVER=file"
+    echo "SESSION_LIFETIME=120"
+    echo "QUEUE_DRIVER=database"
+    echo ""
 } >> .env
+
+{
+    echo "MySQL Root Password      : $mysqlrootpassword"
+    echo "MySQL System username   : $mysqlusername"
+    echo "MySQL System Password   : $mysqlpassword"
+    echo "MySQL System database : $mysqldatabase"
+} >> /root/passwords.txt
 
 php /var/www/html/default/artisan key:generate
 php /var/www/html/default/artisan migrate
@@ -202,4 +226,4 @@ echo "git --work-tree=/var/www/html/default --git-dir=/home/index.git checkout -
 
 sudo chmod +x /home/index.git/hooks/post-receive
 
-echo "\ngit remote add live root@lexscorp.com:home/index.git"
+echo -e "\ngit remote add live root@lexscorp.com:home/index.git"
