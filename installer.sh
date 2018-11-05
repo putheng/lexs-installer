@@ -199,7 +199,7 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "SESSION_LIFETIME=120"
     echo "QUEUE_DRIVER=database"
     echo ""
-} >> .env
+} >> /var/www/html/default/.env
 
 {
     echo "MySQL Root Password      : $mysqlrootpassword"
