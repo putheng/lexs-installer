@@ -4,32 +4,32 @@
 sudo add-apt-repository ppa:ondrej/php
 
 #If you’re missing add-apt-repository, like some plain systems are, 
-echo "\ninstall it and then add-apt-repository ppa:ondrej/php"
+echo -e "\ninstall it and then add-apt-repository ppa:ondrej/php"
 sudo apt-get -y install software-properties-common
 sudo apt-get -y install python-software-properties
 
 # Update
 sudo apt-get update
 
-echo "\nInstall Git"
+echo -e "\nInstall Git"
 sudo apt-get install -y git
 
-echo "\nInstall Nginx"
+echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
-echo "\nInstall PHP 7.2 FPM"
+echo -e "\nInstall PHP 7.2 FPM"
 sudo apt-get -y install php7.2 php7.2-fpm php7.2-mysql php7.2-mbstring php7.2-xml php7.2-curl
 
-echo "\nInstall PHP 7.1 FPM"
+echo -e "\nInstall PHP 7.1 FPM"
 sudo apt-get -y install php7.1 php7.1-cli php7.1-common php7.1-json php7.1-opcache php7.1-mysql php7.1-mbstring php7.1-mcrypt php7.1-zip php7.1-fpm
 
-echo "\nInstall PHP 7.0 FPM"
+echo -e "\nInstall PHP 7.0 FPM"
 sudo apt-get -y install php7.0 php7.0-fpm php7.0-mysql php7.0-mbstring php7.0-xml php7.0-curl
 
-echo "\nInstall PHP 5.5 FPM"
+echo -e "\nInstall PHP 5.5 FPM"
 sudo apt-get -y install php5.6 php5.6-fpm
 
-echo "\nRestart PHP"
+echo -e "\nRestart PHP"
 sudo service php7.2-fpm restart
 sudo service php7.1-fpm restart
 sudo service php7.0-fpm restart
@@ -46,14 +46,14 @@ mysqlrootpassword=$(passwordgen);
 mysqlusername=$(passwordgen);
 mysqldatabase=$(passwordgen);
 
-echo "\nUpdate"
+echo -e "\nUpdate"
 sudo apt-get update
 
-echo "\nSet MySql User, Password"
+echo -e "\nSet MySql User, Password"
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $mysqlrootpassword"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $mysqlrootpassword"
 
-echo "\nInstall MySql"
+echo -e "\nInstall MySql"
 sudo apt-get install -y mysql-server bsdutils libsasl2-modules-sql libsasl2-modules
 
 sudo service mysql restart
@@ -67,7 +67,7 @@ mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES";
 mysql -u root -p"$mysqlrootpassword" -e "DROP DATABASE IF EXISTS test";
 
 # Create Mysql Database
-mysql -u root -p"$mysqlrootpassword" -e "CREATE DATABASE `$mysqldatabase` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+mysql -u root -p"$mysqlrootpassword" -e "CREATE DATABASE $mysqldatabase DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 # Create Mysql User
 mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword'";
@@ -75,36 +75,36 @@ mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'%' IDENTI
 
 mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
 mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
-mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES;";
+mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES";
 
-echo "\nInstall Composer"
+echo -e "\nInstall Composer"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
-echo "\nSetup HHVM"
+echo -e "\nSetup HHVM"
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 B4112585D386EB94
 
-echo "\nHHVM's repository"
+echo -e "\nHHVM's repository"
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 
-echo "\nUpdate"
+echo -e "\nUpdate"
 sudo apt-get update
 
-echo "\nInstall HHVM"
+echo -e "\nInstall HHVM"
 sudo apt-get -y install hhvm
 
-echo "\n Run script which makes the integration with Nginx"
+echo -e "\n Run script which makes the integration with Nginx"
 sudo /usr/share/hhvm/install_fastcgi.sh
 
-echo "\nConfig Nginx to know HHVM"
+echo -e "\nConfig Nginx to know HHVM"
 #Change on Nginx sites enabled ==> fastcgi_pass   127.0.0.1:9000;
 
-echo "\nRemove default Nginx host"
+echo -e "\nRemove default Nginx host"
 rm -f /etc/nginx/sites-enabled/default
 
-echo "\nCreate default host"
+echo -e "\nCreate default host"
 sudo mkdir -p /var/www/html/default
 
-echo "\nCreate new default host"
+echo -e "\nCreate new default host"
 
 cat <<EOF > /etc/nginx/sites-available/default
 # Application with PHP 7.2
@@ -151,19 +151,19 @@ EOF
 
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-echo "\nRestart Nginx"
+echo -e "\nRestart Nginx"
 sudo service nginx restart
 
-echo "\nDownload file system"
+echo -e "\nDownload file system"
 wget https://github.com/putheng/laravelbuild/archive/master.zip
 
 # Unzip 
 unzip master.zip
 
-echo "\nMove file to public html"
+echo -e "\nMove file to public html"
 mv laravelbuild-master/* /var/www/html/default/
 
-echo "\nInstall dependency"
+echo -e "\nInstall dependency"
 composer install -d /var/www/html/default
 
 sudo chmod -R ug+rwx /var/www/html/default/bootstrap/cache
@@ -201,15 +201,16 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo ""
 } >> /var/www/html/default/.env
 
+php /var/www/html/default/artisan key:generate
+php /var/www/html/default/artisan migrate
+php /var/www/html/default/artisan db:seed
+
 {
     echo "MySQL Root Password      : $mysqlrootpassword"
     echo "MySQL System username   : $mysqlusername"
     echo "MySQL System Password   : $mysqlpassword"
     echo "MySQL System database : $mysqldatabase"
+    echo "(theses passwords are saved in /root/passwords.txt)"
 } >> /root/passwords.txt
-
-php /var/www/html/default/artisan key:generate
-php /var/www/html/default/artisan migrate
-php /var/www/html/default/artisan db:seed
 
 
