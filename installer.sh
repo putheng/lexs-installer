@@ -154,6 +154,9 @@ sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 echo -e "\nRestart Nginx"
 sudo service nginx restart
 
+# Install Wget
+sudo apt-get install -y wget
+
 echo -e "\nDownload file system"
 wget https://github.com/putheng/laravelbuild/archive/master.zip
 
@@ -199,17 +202,64 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "SESSION_LIFETIME=120"
     echo "QUEUE_DRIVER=database"
     echo ""
+    echo "REDIS_HOST=127.0.0.1"
+    echo "REDIS_PASSWORD=null"
+    echo "REDIS_PORT=6379"
+    echo ""
+    echo "MAIL_DRIVER=smtp"
+    echo "MAIL_HOST=smtp.mailtrap.io"
+    echo "MAIL_PORT=2525"
+    echo "MAIL_USERNAME=null"
+    echo "MAIL_PASSWORD=null"
+    echo "MAIL_ENCRYPTION=null"
+    echo ""
+    echo "PUSHER_APP_ID="
+    echo "PUSHER_APP_KEY="
+    echo "PUSHER_APP_SECRET="
+    echo "PUSHER_APP_CLUSTER=mt1"
+    echo ""
 } >> /var/www/html/default/.env
 
 php /var/www/html/default/artisan key:generate
 php /var/www/html/default/artisan migrate
 php /var/www/html/default/artisan db:seed
 
+# Install Supervisor
+sudo apt-get install -y supervisor
+
+{
+    echo "[program:laravel-worker]"
+    echo "process_name=%(program_name)s_%(process_num)02d"
+    echo "command=php /var/www/html/default/artisan queue:work --sleep=3 --tries=3"
+    echo "autostart=true"
+    echo "autorestart=true"
+    echo "user=root"
+    echo "numprocs=8"
+    echo "redirect_stderr=true"
+    echo "stdout_logfile=/var/www/html/default/worker.log"
+} >> /etc/supervisor/conf.d/laravel-worker.conf
+
+
+# give execute permission to config file
+sudo chmod +x /etc/supervisor/conf.d/queue-worker.conf
+
+# Reading for any new configurations
+sudo supervisorctl reread
+
+# Now supervisor know that there is new file 
+# but we have to restart this supervisor service also.
+sudo supervisorctl update
+
+# Reload
+sudo supervisorctl reload
+
 {
     echo "MySQL Root Password      : $mysqlrootpassword"
+    echo ""
     echo "MySQL System username   : $mysqlusername"
     echo "MySQL System Password   : $mysqlpassword"
     echo "MySQL System database : $mysqldatabase"
+    echo ""
     echo "(theses passwords are saved in /root/passwords.txt)"
 } >> /root/passwords.txt
 
