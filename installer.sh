@@ -14,6 +14,12 @@ sudo apt-get update
 echo -e "\nInstall Git"
 sudo apt-get install -y git
 
+# Create
+sudo useradd -m -d /home/git git
+
+# Authorized keys file, and it resides in the dot folder "ssh".
+mkdir -p /home/git/.ssh && touch /home/git/.ssh/authorized_keys
+
 echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
@@ -73,9 +79,21 @@ mysql -u root -p"$mysqlrootpassword" -e "CREATE DATABASE $mysqldatabase DEFAULT 
 mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword'";
 mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword'";
 
+mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON *.* TO '$mysqlusername'@'localhost'";
+
 mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
 mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
 mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES";
+
+{
+    echo "MySQL Root Password      : $mysqlrootpassword"
+    echo ""
+    echo "MySQL System username   : $mysqlusername"
+    echo "MySQL System Password   : $mysqlpassword"
+    echo "MySQL System database : $mysqldatabase"
+    echo ""
+    echo "(theses passwords are saved in /root/passwords.txt)"
+} >> /root/passwords.txt
 
 echo -e "\nInstall Composer"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
@@ -239,9 +257,8 @@ sudo apt-get install -y supervisor
     echo "stdout_logfile=/var/www/html/default/worker.log"
 } >> /etc/supervisor/conf.d/laravel-worker.conf
 
-
 # give execute permission to config file
-sudo chmod +x /etc/supervisor/conf.d/queue-worker.conf
+sudo chmod +x /etc/supervisor/conf.d/laravel-worker.conf
 
 # Reading for any new configurations
 sudo supervisorctl reread
@@ -253,14 +270,19 @@ sudo supervisorctl update
 # Reload
 sudo supervisorctl reload
 
-{
-    echo "MySQL Root Password      : $mysqlrootpassword"
-    echo ""
-    echo "MySQL System username   : $mysqlusername"
-    echo "MySQL System Password   : $mysqlpassword"
-    echo "MySQL System database : $mysqldatabase"
-    echo ""
-    echo "(theses passwords are saved in /root/passwords.txt)"
-} >> /root/passwords.txt
+echo -e "MySQL Root Password      : $mysqlrootpassword"
+echo -e ""
+echo -e "MySQL System username   : $mysqlusername"
+echo -e "MySQL System Password   : $mysqlpassword"
+echo -e "MySQL System database : $mysqldatabase"
+echo -e ""
+echo -e "(theses passwords are saved in /root/passwords.txt)"
 
-
+while true; do
+    read -e -p "Restart your server now to complete the install (y/n)? " rsn
+    case $rsn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;
+    esac
+done
+shutdown -r now
