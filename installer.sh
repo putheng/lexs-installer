@@ -79,9 +79,8 @@ mysql -u root -p"$mysqlrootpassword" -e "CREATE DATABASE $mysqldatabase DEFAULT 
 mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword'";
 mysql -u root -p"$mysqlrootpassword" -e "CREATE USER '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword'";
 
-mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON *.* TO '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
-mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON *.* TO '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
-
+mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'localhost' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
+mysql -u root -p"$mysqlrootpassword" -e "GRANT ALL PRIVILEGES ON $mysqldatabase.* TO '$mysqlusername'@'%' IDENTIFIED BY '$mysqlpassword' WITH GRANT OPTION";
 mysql -u root -p"$mysqlrootpassword" -e "FLUSH PRIVILEGES";
 
 {
