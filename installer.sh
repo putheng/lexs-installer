@@ -320,6 +320,7 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "DB_DATABASE=$mysqldatabase"
     echo "DB_USERNAME=$mysqlusername"
     echo "DB_PASSWORD=$mysqlpassword"
+    echo "DB_ROOT=$mysqlrootpassword"
     echo ""
     echo "BROADCAST_DRIVER=log"
     echo "CACHE_DRIVER=file"
