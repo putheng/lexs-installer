@@ -283,7 +283,7 @@ sudo service nginx restart
 sudo apt-get install -y wget
 
 echo -e "\nDownload file system"
-wget https://github.com/putheng/laravelbuild/archive/master.zip
+wget https://github.com/putheng/laravelbuild/archive/1.0.zip
 
 # Unzip 
 unzip master.zip
@@ -307,7 +307,7 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
 {
     echo "APP_NAME=lexscorp"
     echo "APP_ENV=production"
-    echo "APP_KEY=base64:XOio3YUo8424Pt3E34pexetoEOWVbBHNIqhkM80iIVo="
+    echo "APP_KEY="
     echo "APP_DEBUG=true"
     echo "APP_URL=http://lexscorp.com"
     echo "APP_BUILD_URL=lexscorp.com"
