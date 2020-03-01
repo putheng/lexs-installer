@@ -26,20 +26,8 @@ sudo apt-get -y install unzip zip nginx
 echo -e "\nInstall PHP 7.2 FPM"
 sudo apt-get -y install php7.2 php7.2-fpm php7.2-mysql php7.2-mbstring php7.2-xml php7.2-curl
 
-echo -e "\nInstall PHP 7.1 FPM"
-sudo apt-get -y install php7.1 php7.1-cli php7.1-common php7.1-json php7.1-opcache php7.1-mysql php7.1-mbstring php7.1-mcrypt php7.1-zip php7.1-fpm
-
-echo -e "\nInstall PHP 7.0 FPM"
-sudo apt-get -y install php7.0 php7.0-fpm php7.0-mysql php7.0-mbstring php7.0-xml php7.0-curl
-
-echo -e "\nInstall PHP 5.5 FPM"
-sudo apt-get -y install php5.6 php5.6-fpm
-
 echo -e "\nRestart PHP"
 sudo service php7.2-fpm restart
-sudo service php7.1-fpm restart
-sudo service php7.0-fpm restart
-sudo service php5.6-fpm restart
 
 passwordgen() {
     l=$1
@@ -205,24 +193,6 @@ EOF
 echo -e "\nInstall Composer"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
-echo -e "\nSetup HHVM"
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 B4112585D386EB94
-
-echo -e "\nHHVM's repository"
-sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
-
-echo -e "\nUpdate"
-sudo apt-get update
-
-echo -e "\nInstall HHVM"
-sudo apt-get -y install hhvm
-
-echo -e "\n Run script which makes the integration with Nginx"
-sudo /usr/share/hhvm/install_fastcgi.sh
-
-echo -e "\nConfig Nginx to know HHVM"
-#Change on Nginx sites enabled ==> fastcgi_pass   127.0.0.1:9000;
-
 echo -e "\nRemove default Nginx host"
 rm -f /etc/nginx/sites-enabled/default
 
@@ -241,7 +211,7 @@ server {
 	root /var/www/html/default/public;
 	index index.php index.html;
 
-	server_name lexscorp.com;
+	server_name emarketasia.com;
 
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
@@ -283,7 +253,7 @@ sudo service nginx restart
 sudo apt-get install -y wget
 
 echo -e "\nDownload file system"
-wget https://github.com/putheng/laravelbuild/archive/1.0.zip
+wget https://github.com/putheng/ecom_cart_api/archive/1.0.zip
 
 # Unzip 
 unzip master.zip
