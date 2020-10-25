@@ -23,11 +23,11 @@ mkdir -p /home/git/.ssh && touch /home/git/.ssh/authorized_keys
 echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
-echo -e "\nInstall PHP 7.2 FPM"
-sudo apt-get -y install php7.2 php7.2-fpm php7.2-mysql php7.2-mbstring php7.2-xml php7.2-curl
+echo -e "\nInstall PHP 7.4 FPM"
+sudo apt install -y php php-cli php-fpm php-json php-pdo php-mysql php-zip php-gd  php-mbstring php-curl php-xml php-pear php-bcmath
 
 echo -e "\nRestart PHP"
-sudo service php7.2-fpm restart
+sudo service php7.4-fpm restart
 
 passwordgen() {
     l=$1
@@ -202,7 +202,7 @@ sudo mkdir -p /var/www/html/default
 echo -e "\nCreate new default host"
 
 cat <<EOF > /etc/nginx/sites-available/default
-# Application with PHP 7.2
+# Application with PHP 7.4
 #
 server {
 	listen 80;
@@ -211,7 +211,7 @@ server {
 	root /var/www/html/default/public;
 	index index.php index.html;
 
-	server_name emarketasia.com;
+	server_name lixr.me;
 
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
@@ -223,7 +223,7 @@ server {
 
 	location ~* \.php\$ {
 		# With php-fpm unix sockets
-		fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
 		fastcgi_index	index.php;
 		include			fastcgi_params;
 		fastcgi_param   SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;
@@ -253,7 +253,7 @@ sudo service nginx restart
 sudo apt-get install -y wget
 
 echo -e "\nDownload file system"
-wget https://github.com/putheng/ecom_cart_api/archive/1.0.zip
+wget https://github.com/putheng/ema-2345712/archive/master.zip
 
 # Unzip 
 unzip master.zip
@@ -279,8 +279,8 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "APP_ENV=production"
     echo "APP_KEY="
     echo "APP_DEBUG=true"
-    echo "APP_URL=http://lexscorp.com"
-    echo "APP_BUILD_URL=lexscorp.com"
+    echo "APP_URL=http://lixr.me"
+    echo "APP_BUILD_URL=lixr.me"
     echo ""
     echo "LOG_CHANNEL=stack"
     echo ""
