@@ -2,4 +2,4 @@
 
 #install
 
-bash <(curl -L -Ss https://raw.githubusercontent.com/putheng/lexs-installer/2.0.1/installer.sh)
+bash <(curl -L -Ss https://raw.githubusercontent.com/putheng/lexs-installer/master/installer.sh)
