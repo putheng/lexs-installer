@@ -1,3 +1,0 @@
-export const DummySet = (state, data) => {
-    state.DummyState = data
-}

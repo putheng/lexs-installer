@@ -1,3 +1,0 @@
-export const setDummy = ({commit}, data) => {
-	commit('setDummy', data)
-}
