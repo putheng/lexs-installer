@@ -24,10 +24,10 @@ echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
 echo -e "\nInstall PHP 7.1 FPM"
-sudo apt-get install -y php7.3-fpm php7.3-common php7.3-gmp php7.3-curl php7.3-soap php7.3-bcmath php7.3-intl php7.3-mbstring php7.3-xmlrpc php7.3-mcrypt php7.3-mysql php7.3-gd php7.3-xml php7.3-cli php7.3-zip
+sudo apt install -y php-mbstring php-xml php-fpm php-zip php-common php-fpm php-cli
 
 echo -e "\nRestart PHP"
-sudo service php7.3-fpm restart
+sudo service php7.4-fpm restart
 
 passwordgen() {
     l=$1
@@ -223,7 +223,7 @@ server {
 
 	location ~* \.php\$ {
 		# With php-fpm unix sockets
-		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
 		fastcgi_index	index.php;
 		include			fastcgi_params;
 		fastcgi_param   SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;
