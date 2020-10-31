@@ -1,0 +1,60 @@
+1. supplier, store: profile upload company licences
+2. product price calculate base on currency
+3. product price base on individule currency
+4. Admin can disable enable transfer feature
+5.usd sale: $x khr,thb
+6.filter placement tree by id
+7.auto add placement tree id when click create agent
+
+134.209.109.34
+
+8.admin can on store and supplier
+	- create 
+	- update status
+	- topup balance to store
+
+9.when store order is noti to admin not supplier
+10. payment calculate on request withdraw user
+11. admin can delete role
+
+-------
+- admin seach user by name or email
+- admin can delete role
+- admin can delete product
+- product page count sale or can add to trash
+- organize user by their role
+- admin can buy product
+- add botton share referal url to social network ...
+- add phone, id card, id type to create society
+- society can edit only email, avatar
+- show placement tree when create society popup
+- update email validation with softdelete
+- supplier upload business licence
+- store not required licence
+- after create suplier, society .. send them email with login credential
+- admin add stock e-wallet
+- admin e-wallet summary
+- VAT + 10% of sale price
+- Supplier commission to admin before TAX
+
+this month income 100 - outcome = 90
+
+	- TAX of profit 10% of 90 = 9
+	- TAX od benifit 1% = 1
+
+this year in 1200
+	- TAX of benifit 8% of 1200 = 96
+
+-------
+Add order address validation
+
+
+-- sugestion product from the same store (30 prducts limited)
+-- view all go to store
+-- add expire date to QR code
+-- increse show product pagination
+-- VAT on income ( price 10 => sale price 15 = VAT 5 * 10%)
+
+
+- unblock sponser from create placement tree
+

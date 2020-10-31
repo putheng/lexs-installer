@@ -23,11 +23,11 @@ mkdir -p /home/git/.ssh && touch /home/git/.ssh/authorized_keys
 echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
-echo -e "\nInstall PHP 7.1 FPM"
-sudo apt install -y php-mbstring php-xml php-fpm php-zip php-common php-fpm php-cli
+echo -e "\nInstall PHP 7.2 FPM"
+sudo apt-get -y install php7.2 php7.2-fpm php7.2-mysql php7.2-mbstring php7.2-xml php7.2-curl
 
 echo -e "\nRestart PHP"
-sudo service php7.4-fpm restart
+sudo service php7.2-fpm restart
 
 passwordgen() {
     l=$1
@@ -223,7 +223,7 @@ server {
 
 	location ~* \.php\$ {
 		# With php-fpm unix sockets
-		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+		fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
 		fastcgi_index	index.php;
 		include			fastcgi_params;
 		fastcgi_param   SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;

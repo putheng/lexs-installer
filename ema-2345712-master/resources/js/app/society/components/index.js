@@ -1,0 +1,20 @@
+import Vue from 'vue'
+
+/**/
+export const C15E78333ECF2E2B = Vue.component('C15E78333ECF2E2B', require('./settings/Profile.vue').default)
+export const C15E783349AA252B = Vue.component('C15E783349AA252B', require('./settings/Password.vue').default)
+export const C15E78385DBC698B = Vue.component('C15E78385DBC698B', require('./society/Network.vue').default)
+export const C15E78386F7B41CB = Vue.component('C15E78386F7B41CB', require('./society/Sponsor.vue').default)
+export const C15E78387B6179FB = Vue.component('C15E78387B6179FB', require('./society/Placement.vue').default)
+export const C15E783894B6ABFB = Vue.component('C15E783894B6ABFB', require('./payments/Earning.vue').default)
+export const C15E78389F40DC6B = Vue.component('C15E78389F40DC6B', require('./payments/Transfer.vue').default)
+export const C15E7838AB2145CB = Vue.component('C15E7838AB2145CB', require('./payments/Transactions.vue').default)
+export const C15E7838B6920BEB = Vue.component('C15E7838B6920BEB', require('./payments/Withdraw.vue').default)
+export const C15E7864304BEE9B = Vue.component('C15E7864304BEE9B', require('./society/Create.vue').default)
+export const C15E79D1424C5BBB = Vue.component('C15E79D1424C5BBB', require('./payments/Transferhistory.vue').default)
+export const C15E79D268967C1B = Vue.component('C15E79D268967C1B', require('./payments/Userearning.vue').default)
+export const C15EA0513B643BBB = Vue.component('C15EA0513B643BBB', require('./cart/Order.vue').default)
+export const C15EA0514623B55B = Vue.component('C15EA0514623B55B', require('./cart/Tickets.vue').default)
+export const C15EA05152F08A9B = Vue.component('C15EA05152F08A9B', require('./cart/Viewticket.vue').default)
+export const C15EA0515DC0203B = Vue.component('C15EA0515DC0203B', require('./cart/Wishlist.vue').default)
+export const C15EA271901E505B = Vue.component('C15EA271901E505B', require('./settings/Index.vue').default)
