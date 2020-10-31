@@ -23,11 +23,11 @@ mkdir -p /home/git/.ssh && touch /home/git/.ssh/authorized_keys
 echo -e "\nInstall Nginx"
 sudo apt-get -y install unzip zip nginx
 
-echo -e "\nInstall PHP 7.4 FPM"
-sudo apt install -y php php-cli php-fpm php-json php-pdo php-mysql php-zip php-gd  php-mbstring php-curl php-xml php-pear php-bcmath
+echo -e "\nInstall PHP 7.1 FPM"
+sudo apt-get -y install php7.1 php7.1-cli php7.1-common php7.1-json php7.1-opcache php7.1-mysql php7.1-mbstring php7.1-mcrypt php7.1-zip php7.1-fpm
 
 echo -e "\nRestart PHP"
-sudo service php7.4-fpm restart
+sudo service php7.1-fpm restart
 
 passwordgen() {
     l=$1
@@ -202,11 +202,11 @@ sudo mkdir -p /var/www/html/default
 echo -e "\nCreate new default host"
 
 cat <<EOF > /etc/nginx/sites-available/default
-# Application with PHP 7.4
+# Application with PHP 7.1
 #
 server {
 	listen 80;
-    listen 443 ssl http2;
+    #listen 443 ssl http2;
 
 	root /var/www/html/default/public;
 	index index.php index.html;
@@ -223,7 +223,7 @@ server {
 
 	location ~* \.php\$ {
 		# With php-fpm unix sockets
-		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+		fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
 		fastcgi_index	index.php;
 		include			fastcgi_params;
 		fastcgi_param   SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;
