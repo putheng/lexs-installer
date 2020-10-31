@@ -211,7 +211,7 @@ server {
 	root /var/www/html/default/public;
 	index index.php index.html;
 
-	server_name lixr.me;
+	server_name makemeapps.com;
 
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
@@ -279,8 +279,8 @@ chmod -R 775 /var/www/html/default/bootstrap/cache
     echo "APP_ENV=production"
     echo "APP_KEY="
     echo "APP_DEBUG=true"
-    echo "APP_URL=http://lixr.me"
-    echo "APP_BUILD_URL=lixr.me"
+    echo "APP_URL=http://makemeapps.com"
+    echo "APP_BUILD_URL=makemeapps.com"
     echo ""
     echo "LOG_CHANNEL=stack"
     echo ""
